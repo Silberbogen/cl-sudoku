@@ -22,8 +22,6 @@
 (defpackage #:cl-sudoku
   (:nicknames :sudoku)
   (:use #:cl)
-  (:export
-   #:hole-eingabe
-   #:spiele-sudoku))
+  (:export #:spiele-sudoku))
 		   
 
