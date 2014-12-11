@@ -175,7 +175,6 @@
   "Holt aus einer Eingabe 2 Koordinaten und einen Wert heraus"
   (format t "Deine Eingabe (? für Anleitung): ")
   (let ((eingabe (string-upcase (string-trim " " (read-line)))))
-	(format t "Eingabe: ~A~%" eingabe)
 	(if (find-if #'digit-char-p eingabe)
 		(let* ((y (- (char-int (aref eingabe 0)) 65)) ; 1 mehr, da Zählung bei 0 beginnt
 			   (lst (coerce (string-trim " " (subseq eingabe 1)) 'list))
