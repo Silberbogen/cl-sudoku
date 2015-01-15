@@ -21,7 +21,7 @@
 
 (in-package #:cl-sudoku)
 
-(defparameter *spiel* nil "Nimm in Kürze das Spiel entgegen")
+;(defparameter *spiel* nil "Nimm in Kürze das Spiel entgegen")
 
 (defun erstelle-kopie (orig)
   "Erzeugt eine Kopie des übergebenen Sudoku-Arrays"
@@ -181,7 +181,6 @@
 			   (lst (coerce (string-trim " " (subseq eingabe 1)) 'list))
 			   (x (- (char-int (first lst)) 49)) ; 1 mehr, da Zählung bei 9 beginnt
 			   (wert (- (char-int (first (last lst))) 48)))
-;		  (format t "x:~A y:~A wert:~A~%" x y wert)
 		  (list :koordinaten x y wert))
 		(list (intern (string-upcase eingabe) :keyword)))))
 
@@ -190,6 +189,7 @@
   "Ein vollständiges Sudoku-Spiel, inklusive Hinweisen und Zugrücknahme"
   (format t "Erzeuge neues Rätsel, bitte warten!~%")
   (let* ((original (erzeuge-sudoku))
+         (spiel (erzeuge-rätsel (erstelle-kopie original)))
 		 (unberührt 't)
 		 züge)
 	(flet ((zeige-anleitung ()
@@ -198,10 +198,9 @@
 			 (let ((i (second ergebnis))
 				   (j (third ergebnis))
 				   (wert (fourth ergebnis)))
-			   (push (list i j (aref *spiel* i j)) züge)
-			   (setf (aref *spiel* i j) wert)
-;               (format t "~A" *spiel*)
-			   (when (gültige-lösung-p *spiel*)
+			   (push (list i j (aref spiel i j)) züge)
+			   (setf (aref spiel i j) wert)
+			   (when (gültige-lösung-p spiel)
 				 (format t "Gratuliere!~%Du hast das Sudoku gelöst!~%")
 				 (unless unberührt
 				   (format t "Allerdings, mit ein klein wenig Hilfe von mir, hm? ;-)~%"))
@@ -210,11 +209,11 @@
 			 (setf unberührt 'nil)
 			 (do* ((i (random 9) (random 9))
 				   (j (random 9) (random 9)))
-				  ((eq (aref *spiel* i j) '_)
+				  ((eq (aref spiel i j) '_)
 				   (push (list i j '_) züge)
-				   (setf (aref *spiel* i j) (aref original i j))))
-			 (when (gültige-lösung-p *spiel*)
-			   (pprint-sudoku *spiel* t)
+				   (setf (aref spiel i j) (aref original i j))))
+			 (when (gültige-lösung-p spiel)
+			   (pprint-sudoku spiel t)
 			   (format t "~%Schade!~%Jetzt habe ich deine Arbeit übernommen.~%")
 			   (format t "Beim nächsten Mal, solltest du versuchen, es selber zu lösen!~%")
 			   (return-from spiele-sudoku)))
@@ -224,15 +223,14 @@
 					  (i (first zug))
 					  (j (second zug))
 					  (wert (third zug)))
-				 (setf (aref *spiel* i j) wert))))
+				 (setf (aref spiel i j) wert))))
 		   (print-lösbarkeit ()
-			 (if (equalp (löse-sudoku (erstelle-kopie *spiel*)) original)
+			 (if (equalp (löse-sudoku (erstelle-kopie spiel)) original)
 				 (format t "(lösbar) ")
 				 (format t "(unlösbar) "))))
-      (defparameter *spiel* (erzeuge-rätsel (erstelle-kopie original)))
 	  (do ()
 		  (nil)
-		(pprint-sudoku *spiel* t)
+		(pprint-sudoku spiel t)
 		(print-lösbarkeit)
 		(let ((ergebnis (hole-eingabe)))
 		  (case (first ergebnis)
