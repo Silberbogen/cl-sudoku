@@ -17,11 +17,14 @@
 ;;;; OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ;;;; ------------------------------------------------------------------------
 
-;(require :cl-hilfsroutinen)
 
 (defpackage #:cl-sudoku
   (:nicknames :sudoku)
   (:use #:cl)
-  (:export #:spiele-sudoku))
+  (:export #:spiele-sudoku
+           #:löse-sudoku
+           #:pprint-sudoku
+           #:erzeuge-rätsel
+           #:gültige-lösung-p))
 		   
 
