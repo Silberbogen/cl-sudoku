@@ -23,10 +23,10 @@
 
 (in-package #:cl-sudoku)
 
-;(defparameter *spiel* nil "Nimm in Kürze das Spiel entgegen")
+
 
 (defun erstelle-kopie (orig)
-  "Erzeugt eine Kopie des übergebenen Sudoku-Arrays"
+  "ERSTELLE-KOPIE erzeugt eine tiefe Kopie des übergebenen Sudoku-Arrays."
   (let ((kopie (make-array '(9 9))))
 	(dotimes (i 9 kopie)
 	  (dotimes (j 9)
@@ -34,7 +34,7 @@
 
 
 (defun möglichkeiten (zeile spalte tab)
-  "Gibt eine Liste aller Möglichkeiten einer Position zurück"
+  "MÖGLICHKEITEN errechnet, welche Zahlen tatsächlich an einer Position möglich ist und übergibt eine Liste mit allen Möglichkeiten zurück."
   (flet ((zeile-nachbarn (zeile spalte &aux (nachbarn '()))
 		   (dotimes (i 9 nachbarn)
 			 (let ((x (aref tab zeile i)))
@@ -61,7 +61,17 @@
 
 
 (defun erzeuge-sudoku (&aux (max 9))
-  "Erzeugt ein gültiges Sudoku"
+  "ERZEUGE-SUDOKU erzeugt ein neues, gültiges, vollständig ausgefülltest Sudoku.
+Beispiel: (erzeuge-sudoku)
+#2A((7 9 4 6 2 8 1 5 3)
+    (3 5 1 7 4 9 6 2 8)
+    (2 8 6 5 1 3 7 9 4)
+    (1 2 8 3 9 6 5 4 7)
+    (5 6 3 4 7 1 2 8 9)
+    (4 7 9 8 5 2 3 1 6)
+    (9 3 7 2 8 5 4 6 1)
+    (8 4 5 1 6 7 9 3 2)
+    (6 1 2 9 3 4 8 7 5))"
   (flet ((suche-sudoku ()
 		   (let ((tab (make-array '(9 9) :initial-element '_)))
 			 (flet ((setze-feld (i j)
@@ -82,6 +92,34 @@
 
 
 (defun erzeuge-rätsel (&optional (tab '()) (anz 25) (versuch '()) (runde 81))
+  "ERZEUGE-RÄTSEL erstellt aus einem gültigen SUDOKU ein einmaliges Rätsel. Je niedriger die Anzahl ANZ an vorgegebenen ausgefüllten Feldern ist, umso schwerer wird das Sudoku. Zurückgeliefert wird das unausgefüllte Sudoku, sowie das ausgefüllte Sudoku.
+Beispiel: (erzeuge-rätsel #2A((7 9 4 6 2 8 1 5 3)
+    (3 5 1 7 4 9 6 2 8)
+    (2 8 6 5 1 3 7 9 4)
+    (1 2 8 3 9 6 5 4 7)
+    (5 6 3 4 7 1 2 8 9)
+    (4 7 9 8 5 2 3 1 6)
+    (9 3 7 2 8 5 4 6 1)
+    (8 4 5 1 6 7 9 3 2)
+    (6 1 2 9 3 4 8 7 5)))
+#2A((7 9 _ _ _ _ 1 _ _)
+    (_ _ _ _ _ _ _ _ _)
+    (_ _ 6 _ _ _ 7 9 4)
+    (_ _ 8 _ _ _ _ _ 7)
+    (_ 6 _ _ 7 _ 2 _ 9)
+    (_ 7 _ 8 5 _ 3 1 _)
+    (_ _ 7 _ _ 5 _ _ _)
+    (_ _ 5 _ _ _ _ _ _)
+    (6 _ 2 9 _ 4 _ _ _))
+#2A((7 9 4 6 2 8 1 5 3)
+    (3 5 1 7 4 9 6 2 8)
+    (2 8 6 5 1 3 7 9 4)
+    (1 2 8 3 9 6 5 4 7)
+    (5 6 3 4 7 1 2 8 9)
+    (4 7 9 8 5 2 3 1 6)
+    (9 3 7 2 8 5 4 6 1)
+    (8 4 5 1 6 7 9 3 2)
+    (6 1 2 9 3 4 8 7 5))"
   (labels ((entferne-zahl (orig)
 			 (let ((i (random 9))
 				   (j (random 9)))
