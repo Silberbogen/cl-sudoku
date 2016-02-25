@@ -145,7 +145,17 @@ Beispiel: (erzeuge-rätsel #2A((7 9 4 6 2 8 1 5 3)
 
 
 (defun gültige-lösung-p (tab &aux (max 9))
-  "Prüft ob die übergebene Lösung ein gültiges Sudoku ist"
+  "GÜLTIGE-LÖSUNG-P überprüft ob die übergebene Sudoku-Lösung gültig ist.
+Beispiel: (gültige-lösung-p #2A((7 9 4 6 2 8 1 5 3)
+    (3 5 1 7 4 9 6 2 8)
+    (2 8 6 5 1 3 7 9 4)
+    (1 2 8 3 9 6 5 4 7)
+    (5 6 3 4 7 1 2 8 9)
+    (4 7 9 8 5 2 3 1 6)
+    (9 3 7 2 8 5 4 6 1)
+    (8 4 5 1 6 7 9 3 2)
+    (6 1 2 9 3 4 8 7 5)))
+T"
   (labels ((gültigp (lst)
 			 (unless (numberp (first lst))
 			   (return-from gültige-lösung-p 'nil)))
@@ -180,7 +190,25 @@ Beispiel: (erzeuge-rätsel #2A((7 9 4 6 2 8 1 5 3)
 
 
 (defun löse-sudoku (tab &optional (zeile 0) (spalte 0) &aux (max 9))
-  "Löst ein Sudoku"
+  "LÖSE-SUDOKU versucht das übergebene Sudoku TAB zu lösen und gibt die LÖSUNG oder NIL zurück.
+Beispiel: (löse-sudoku #2A((7 9 _ _ _ _ 1 _ _)
+    (_ _ _ _ _ _ _ _ _)
+    (_ _ 6 _ _ _ 7 9 4)
+    (_ _ 8 _ _ _ _ _ 7)
+    (_ 6 _ _ 7 _ 2 _ 9)
+    (_ 7 _ 8 5 _ 3 1 _)
+    (_ _ 7 _ _ 5 _ _ _)
+    (_ _ 5 _ _ _ _ _ _)
+    (6 _ 2 9 _ 4 _ _ _)))
+#2A((7 9 4 6 2 8 1 5 3)
+    (3 5 1 7 4 9 6 2 8)
+    (2 8 6 5 1 3 7 9 4)
+    (1 2 8 3 9 6 5 4 7)
+    (5 6 3 4 7 1 2 8 9)
+    (4 7 9 8 5 2 3 1 6)
+    (9 3 7 2 8 5 4 6 1)
+    (8 4 5 1 6 7 9 3 2)
+    (6 1 2 9 3 4 8 7 5))"
   (cond ((= zeile max)
 		 tab)
 		((= spalte max)
@@ -194,7 +222,28 @@ Beispiel: (erzeuge-rätsel #2A((7 9 4 6 2 8 1 5 3)
 
 
 (defun pprint-sudoku (tab &optional (koordinaten 'nil))
-  "Gibt ein Sudoku-Array als formatiertes Sudoku aus"
+  "PPRINT-SUDOKU gibt ein übergebenes Sudoku TAB als formatiertes Sudoku in Tabellenform aus, wahlweise mit oder ohne Koordinaten.
+Beispiel: (pprint-sudoku #2A((7 9 _ _ _ _ 1 _ _)
+    (_ _ _ _ _ _ _ _ _)
+    (_ _ 6 _ _ _ 7 9 4)
+    (_ _ 8 _ _ _ _ _ 7)
+    (_ 6 _ _ 7 _ 2 _ 9)
+    (_ 7 _ 8 5 _ 3 1 _)
+    (_ _ 7 _ _ 5 _ _ _)
+    (_ _ 5 _ _ _ _ _ _)
+    (6 _ 2 9 _ 4 _ _ _)))
+ 7 9 4 | 6 2 8 | 1 5 3 
+ 3 5 1 | 7 4 9 | 6 2 8 
+ 2 8 6 | 5 1 3 | 7 9 4 
+-------+-------+-------
+ 1 2 8 | 3 9 6 | 5 4 7 
+ 5 6 3 | 4 7 1 | 2 8 9 
+ 4 7 9 | 8 5 2 | 3 1 6 
+-------+-------+-------
+ 9 3 7 | 2 8 5 | 4 6 1 
+ 8 4 5 | 1 6 7 | 9 3 2 
+ 6 1 2 | 9 3 4 | 8 7 5 
+NIL"
   (flet ((2d-array->list (array)
 		   (loop for i below (array-dimension array 0)
 			  collect (loop for j below (array-dimension array 1)
@@ -213,7 +262,11 @@ Beispiel: (erzeuge-rätsel #2A((7 9 4 6 2 8 1 5 3)
 
 
 (defun hole-eingabe ()
-  "Holt aus einer Eingabe 2 Koordinaten und einen Wert heraus"
+  "HOLE-EINGABE nimmt eine Eingabe entgegen und liefert diese qualifiziert zurück.
+Beispiel: (hole-eingabe)
+Deine Eingabe (? für Anleitung): a5 7
+
+(:KOORDINATEN 4 0 7)"
   (format t "Deine Eingabe (? für Anleitung): ")
   (let ((eingabe (string-upcase (string-trim " " (read-line)))))
 	(if (find-if #'digit-char-p eingabe)
@@ -226,7 +279,7 @@ Beispiel: (erzeuge-rätsel #2A((7 9 4 6 2 8 1 5 3)
 
 
 (defun spiele-sudoku ()
-  "Ein vollständiges Sudoku-Spiel, inklusive Hinweisen und Zugrücknahme"
+  "SPIELE-SUDOKU startet eine Partie Sudoku."
   (format t "Erzeuge neues Rätsel, bitte warten!~%")
   (let* ((original (erzeuge-sudoku))
          (spiel (erzeuge-rätsel (erstelle-kopie original)))
