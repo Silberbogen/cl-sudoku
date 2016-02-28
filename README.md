@@ -17,6 +17,7 @@ Zum Spielen unter Slime empfehlen sich folgende Kommandos:
 - (spiele-sudoku)
 
 Zur Erstellung einer ausführbaren Datei in SBCL:
+
 $ *sbcl*
 
 * *(ql:quickload :cl-hilfsroutinen)*
