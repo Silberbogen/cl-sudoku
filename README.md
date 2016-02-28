@@ -11,10 +11,17 @@ Ebenso beinhaltet das Paket einen Sudoku-Löser.
 Zum Spielen sollte man per _git clone_ das Repository im Verzeichnis
 ~/quicklisp/local-projects/ anlegen.
 
-Zum spielen unter Slime empfehlen sich folgende Kommandos:
+Zum Spielen unter Slime empfehlen sich folgende Kommandos:
 - (ql:quickload :cl-sudoku)
 - (in-package :cl-sudoku)
 - (spiele-sudoku)
+
+Zur Erstellung einer ausführbaren Datei in SBCL:
+$ *sbcl*
+
+* *(ql:quickload :cl-hilfsroutinen)*
+* *(ql:quickload :cl-sudoku)*
+* *(sb-ext:save-lisp-and-die #p"sudoku" :toplevel #'cl-sudoku:spiele-sudoku :executable t)*
 
 
 *Funktionen*

@@ -268,6 +268,7 @@ Deine Eingabe (? für Anleitung): a5 7
 
 (:KOORDINATEN 4 0 7)"
   (format t "Deine Eingabe (? für Anleitung): ")
+  (terpri)
   (let ((eingabe (string-upcase (string-trim " " (read-line)))))
 	(if (find-if #'digit-char-p eingabe)
 		(let* ((y (- (char-int (aref eingabe 0)) 65)) ; 1 mehr, da Zählung bei 0 beginnt
